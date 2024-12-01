@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <algorithm>
+#include <map>
+#include <unordered_map>
+
+int main() {
+    std::vector<int> leftList, rightList;
+    int leftNumber, rightNumber;
+    while (true) {
+        std::cin >> leftNumber;
+        std::cin >> rightNumber;
+        if (leftNumber == -1 && rightNumber == -1)
+            break;
+        leftList.push_back(leftNumber);
+        rightList.push_back(rightNumber);
+    }
+    if (leftList.size() != rightList.size()) {
+        std::cout << "Eroare: Listele au dimensiuni diferite!\n";
+        return 1;
+    }
+    std::sort(leftList.begin(), leftList.end());
+    std::sort(rightList.begin(), rightList.end());
+    int totalDistance = 0;
+    for (size_t i = 0; i < leftList.size(); ++i) {
+        totalDistance += std::abs(leftList[i] - rightList[i]);
+    }
+    std::cout << "Distanța totală între cele două liste este: " << totalDistance << "\n";
+
+    std::unordered_map<int,int> m;
+    for(int num:rightList) {
+        m[num]++;
+    }
+    int score=0;
+    for(int num:leftList) {
+        score+=num*m[num];
+    }
+    std::cout << "Similarity score: " << score << std::endl;
+    return 0;
+}
