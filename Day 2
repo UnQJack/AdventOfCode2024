@@ -1,0 +1,53 @@
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <cmath>
+
+bool isSafeReport(const std::vector<int>& levels) {
+    if (levels.size() < 2) return false;
+    bool increasing = true, decreasing = true;
+    for (size_t i = 1; i < levels.size(); ++i) {
+        int diff = levels[i] - levels[i - 1];
+        if (std::abs(diff) < 1 || std::abs(diff) > 3) return false;
+        if (diff > 0) decreasing = false;
+        if (diff < 0) increasing = false;
+    }
+    return increasing || decreasing;
+}
+
+bool canBeSafeByRemovingOne(const std::vector<int>& levels) {
+    for (size_t i = 0; i < levels.size(); ++i) {
+        std::vector<int> newLevels = levels;
+        newLevels.erase(newLevels.begin() + i);
+
+        if (isSafeReport(newLevels)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int main() {
+    std::vector<std::vector<int>> reports;
+    std::string line;
+    while (true) {
+        std::getline(std::cin, line);
+        if (line.empty())
+            break;
+        std::vector<int> levels;
+        std::istringstream iss(line);
+        int value;
+        while (iss >> value) {
+            levels.push_back(value);
+        }
+        reports.push_back(levels);
+    }
+    int safeCount = 0;
+    for (const auto& report : reports) {
+        if (isSafeReport(report) || canBeSafeByRemovingOne(report)) {
+            ++safeCount;
+        }
+    }
+    std::cout << "Numărul de rapoarte sigure: " << safeCount << "\n";
+    return 0;
+}
